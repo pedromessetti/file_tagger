@@ -11,10 +11,7 @@ var (
 	chars       = "abcdefghijklmnopqrstuvwxyz"
 	nums 		= "0123456789"
 	passChars	= chars + nums + strings.ToUpper(chars)
-	idLength    = 8
-	userLength  = 8
 	emailDomain = "example.com"
-	passwordLength = 16
 	firstNames  = []string{"Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Hannah", "Ivy", "Jack", "Pedro", "Mario", "Leo", "Anna", "Maria"}
 	lastNames   = []string{"Smith", "Johnson", "Brown", "Lee", "Davis", "Wilson", "Evans", "Clark", "Wright", "Walker", "Nunes", "Pereira", "Silva", "Gomes"}
 	possibleAdress = []string{"Visconde de Piraja", "Maria Helena", "Marielle Franco", "Sacadura Cabral", "Maua", "Neves Ferreira", "28 de Setembro", "Quirino Lopes"}
@@ -72,5 +69,5 @@ func GenerateRandomUsers(userAmount int) {
 			return
 		}
 	}
-	fmt.Println("Random user data has been written to users.txt")
+	fmt.Println("Random user data has been written to", file.Name())
 }
