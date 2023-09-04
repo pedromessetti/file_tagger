@@ -41,9 +41,9 @@ func getRandomElement(slice []string) string {
 	return slice[rand.Intn(len(slice))]
 }
 
-func generateRandomUsers() {
+func GenerateRandomUsers(userAmount int) {
 	// Create a new file to write the user data
-	file, err := os.Create("../users.txt")
+	file, err := os.Create("users.txt")
 	if err != nil {
 		fmt.Println("Error creating file:", err)
 		return
@@ -51,7 +51,7 @@ func generateRandomUsers() {
 	defer file.Close()
 
 	// Generate and write data for 20 random users
-	for i := 1; i <= 50; i++ {
+	for i := 1; i <= userAmount; i++ {
 		id := generateRandomNumber(16)
 		firstName := getRandomElement(firstNames)
 		lastName := getRandomElement(lastNames)
