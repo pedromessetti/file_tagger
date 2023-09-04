@@ -1,7 +1,6 @@
 package tag
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -15,31 +14,35 @@ func TagFile(file string) {
 	}
 	defer fileToTag.Close()
 
-	// Scanner to read the file line by line
-	scanner := bufio.NewScanner(fileToTag)
-
-	// Slice to store the modified lines
-	var modifiedLines []string
-
-	// Loop through each line
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.Contains(line, "user") || strings.Contains(line, "password") {
-			line = "[RISK] " + line
-		}
-		modifiedLines = append(modifiedLines, line)
-		// fmt.Println(modifiedLines)
+	stat, err := fileToTag.Stat()
+	if err != nil {
+		fmt.Println("Error getting file info:", err)
+		return
 	}
+	fileSize := stat.Size()
 
-	if err := scanner.Err(); err != nil {
+	bufferSize := int(fileSize)
+	buffer := make([]byte, bufferSize)
+	_, err = fileToTag.Read(buffer)
+	if err != nil {
 		fmt.Println("Error reading file:", err)
+		return
 	}
 
-	fileToTag.Truncate(0)
+	modifiedContent := string(buffer)
+	modifiedContent = strings.ReplaceAll(modifiedContent, "user", "[RISK] user")
+	modifiedContent = strings.ReplaceAll(modifiedContent, "password", "[RISK] password")
+
 	fileToTag.Seek(0, 0)
-
-	for _, line := range modifiedLines {
-		fmt.Fprintln(fileToTag, line)
+	_, err = fileToTag.WriteString(modifiedContent)
+	if err != nil {
+		fmt.Println("Error writing to file:", err)
+		return
 	}
+
+	if len(modifiedContent) < bufferSize {
+		fileToTag.Truncate(int64(len(modifiedContent)))
+	}
+
 	fmt.Println("File tagged successfully!")
 }
