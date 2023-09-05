@@ -6,15 +6,15 @@ import (
 	"strings"
 )
 
-func TagFile(file string) {
-	fileToTag, err := os.OpenFile(file, os.O_RDWR, 0644)
+func TagFile(filePath string) {
+	file, err := os.OpenFile(filePath, os.O_RDWR, 0644)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		return
 	}
-	defer fileToTag.Close()
+	defer file.Close()
 
-	stat, err := fileToTag.Stat()
+	stat, err := file.Stat()
 	if err != nil {
 		fmt.Println("Error getting file info:", err)
 		return
@@ -23,7 +23,7 @@ func TagFile(file string) {
 
 	bufferSize := int(fileSize)
 	buffer := make([]byte, bufferSize)
-	_, err = fileToTag.Read(buffer)
+	_, err = file.Read(buffer)
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 		return
@@ -33,15 +33,15 @@ func TagFile(file string) {
 	modifiedContent = strings.ReplaceAll(modifiedContent, "user", "[RISK] user")
 	modifiedContent = strings.ReplaceAll(modifiedContent, "password", "[RISK] password")
 
-	fileToTag.Seek(0, 0)
-	_, err = fileToTag.WriteString(modifiedContent)
+	file.Seek(0, 0)
+	_, err = file.WriteString(modifiedContent)
 	if err != nil {
 		fmt.Println("Error writing to file:", err)
 		return
 	}
 
 	if len(modifiedContent) < bufferSize {
-		fileToTag.Truncate(int64(len(modifiedContent)))
+		file.Truncate(int64(len(modifiedContent)))
 	}
 
 	fmt.Println("File tagged successfully!")
