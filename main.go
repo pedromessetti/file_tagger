@@ -9,12 +9,12 @@ import (
 )
 
 func main() {
-	file := "users.txt"
+	filePath := "users.txt"
 
 	// Check if the file exists, if doesn't, generate it with random users
-	if _, err := os.Stat(file); os.IsNotExist(err) {
-		gen.GenerateRandomUsers(100000)
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		gen.GenerateRandomUsers(filePath, 100000)
 	}
 
-	tag.TagFile(file)
+	tag.TagFile(filePath)
 }
