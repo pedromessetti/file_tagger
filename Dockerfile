@@ -4,8 +4,6 @@ WORKDIR /app
 
 COPY go.mod ./
 
-RUN go mod download
-
 COPY . .
 
 ENV GOPROXY=https://goproxy.io
